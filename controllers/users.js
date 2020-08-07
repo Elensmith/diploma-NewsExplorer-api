@@ -5,14 +5,13 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 const User = require("../models/users");
 const NotFound = require("../errors/notFound");
 const Conflict = require("../errors/conflict");
+const { userDoesntExists, emailExists } = require("../constants/errorText");
 
 module.exports.getUserById = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        return Promise.reject(
-          new NotFound("Такого пользователя не существует"),
-        );
+        return Promise.reject(new NotFound(userDoesntExists));
       }
       return res.send({ name: user.name, email: user.email });
     })
@@ -36,7 +35,7 @@ module.exports.createUser = (req, res, next) => {
 
       .catch((err) => {
         if (err.name === "MongoError" || err.code === 11000) {
-          return next(new Conflict("Такая почта уже есть"));
+          return next(new Conflict(emailExists));
         }
         return next(err);
       });

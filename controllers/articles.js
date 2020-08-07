@@ -2,6 +2,11 @@ const Article = require("../models/articles");
 const NotFound = require("../errors/notFound");
 const BadRequest = require("../errors/badRequest");
 const Forbidden = require("../errors/forbidden");
+const {
+  notFoundArticle,
+  forbiddenDelete,
+  validationError,
+} = require("../constants/errorText");
 
 module.exports.getArticles = (req, res, next) => {
   Article.find({ owner: req.user._id })
@@ -14,10 +19,10 @@ module.exports.deleteArticleById = (req, res, next) => {
     .select("+owner")
     .then((article) => {
       if (article === null) {
-        return next(new NotFound("Статьи не существует"));
+        return next(new NotFound(notFoundArticle));
       }
       if (article.owner.toString() !== req.user._id.toString()) {
-        return Promise.reject(new Forbidden("Навозможно удалить чужую статью"));
+        return Promise.reject(new Forbidden(forbiddenDelete));
       }
       return Article.deleteOne(article)
         .then(() => res.send(article))
@@ -43,15 +48,12 @@ module.exports.createArticle = (req, res, next) => {
     owner: req.user._id,
   })
     .then((article) => {
-      if (!article) {
-        return Promise.reject(new BadRequest("Вы что-то не ввели"));
-      }
-      return res.send({ data: article });
+      res.send({ data: article });
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        return Promise.reject(new BadRequest("Что-то пошло не так"));
+        return Promise.reject(new BadRequest(validationError));
       }
-      return next(new Error("Ошибка создания статьи"));
+      return next(err);
     });
 };

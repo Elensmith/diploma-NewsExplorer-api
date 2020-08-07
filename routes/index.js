@@ -1,49 +1,26 @@
-const { celebrate, Joi, errors } = require("celebrate");
+const { errors } = require("celebrate");
+const helmet = require("helmet");
 const auth = require("../middlewares/auth");
 const usersRouter = require("./users");
 const articlesRouter = require("./articles");
 const NotFound = require("../errors/notFound");
+const { pageNotFound } = require("../constants/errorText");
 const { mainError } = require("../middlewares/mainError");
 const { createUser, login } = require("../controllers/users");
 const { requestLogger, errorLogger } = require("../middlewares/logger");
+const { limiter } = require("../middlewares/rateLimiter");
+const { signupCheck, signinCheck } = require("../middlewares/validationJoi");
 
 module.exports = function (app) {
+  app.use(helmet());
+  app.use(limiter);
   app.use(requestLogger);
+  app.post("/signup", signupCheck, createUser);
+  app.post("/signin", signinCheck, login);
   app.use("/users", auth, usersRouter);
-  app.post(
-    "/signup",
-    celebrate({
-      body: Joi.object().keys({
-        email: Joi.string()
-          .email()
-          .required()
-          .error(new Error("Invalid email")),
-        password: Joi.string().min(8).max(30).required(),
-        name: Joi.string()
-          .min(2)
-          .max(30)
-          .required()
-          .error(new Error("Name mush be 2-30 characters long")),
-      }),
-    }),
-    createUser,
-  );
-  app.post(
-    "/signin",
-    celebrate({
-      body: Joi.object().keys({
-        email: Joi.string()
-          .email()
-          .required()
-          .error(new Error("Email is a required field!")),
-        password: Joi.string().min(8).max(30).required(),
-      }),
-    }),
-    login,
-  );
   app.use("/articles", auth, articlesRouter);
   app.use((req, res, next) => {
-    next(new NotFound("страница не найдена"));
+    next(new NotFound(pageNotFound));
   });
   app.use(errorLogger);
   app.use(errors());

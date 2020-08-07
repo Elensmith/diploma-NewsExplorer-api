@@ -2,8 +2,9 @@ const express = require("express");
 
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const { mongoUrl, PORT } = require("./constants/config");
 
-mongoose.connect("mongodb://localhost:27017/newsexplorer", {
+mongoose.connect(mongoUrl, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
@@ -16,7 +17,6 @@ const { log } = console;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const { PORT = 3000 } = process.env;
 require("./routes")(app);
 
 app.listen(PORT, () => {

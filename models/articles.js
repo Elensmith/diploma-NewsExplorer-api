@@ -27,7 +27,6 @@ const articleSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => isURL(v),
-      message: "Введите корректный URL",
     },
   },
   image: {
@@ -35,7 +34,6 @@ const articleSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => isURL(v),
-      message: "Введите корректный URL",
     },
   },
   owner: {
