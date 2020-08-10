@@ -2,9 +2,12 @@ const express = require("express");
 
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-const { mongoUrl, PORT } = require("./constants/config");
+const helmet = require("helmet");
+const { DB_ADRESS, PORT } = require("./constants/config");
+const { limiter } = require("./middlewares/rateLimiter");
+const { requestLogger, errorLogger } = require("./middlewares/logger");
 
-mongoose.connect(mongoUrl, {
+mongoose.connect(DB_ADRESS, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
@@ -13,12 +16,14 @@ mongoose.connect(mongoUrl, {
 
 const app = express();
 const { log } = console;
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use(helmet());
+app.use(limiter);
+app.use(requestLogger);
 require("./routes")(app);
 
+app.use(errorLogger);
 app.listen(PORT, () => {
   log("App is listening to port ", PORT);
 });

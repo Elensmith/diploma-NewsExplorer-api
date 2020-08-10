@@ -4,4 +4,4 @@
 
 ## www.api.elena-k.tk
 
-### tag 1.0.5
+### tag 1.0.6
