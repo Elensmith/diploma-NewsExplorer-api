@@ -11,6 +11,10 @@ const { requestLogger, errorLogger } = require("./middlewares/logger");
 const whitelist = [
   "http://localhost:8080",
   "https://elensmith.github.io/diploma-NewsExplorer-frontend",
+  "https://api.elena-k.tk",
+  "http://api.elena-k.tk",
+  "https://elena-k.tk",
+  "http://elena-k.tk",
 ];
 const corsOptions = {
   origin(origin, callback) {
