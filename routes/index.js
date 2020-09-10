@@ -12,29 +12,11 @@ const { createUser, login } = require("../controllers/users");
 
 const { signupCheck, signinCheck } = require("../middlewares/validationJoi");
 
-const whitelist = [
-  "http://localhost:8080",
-  "https://elensmith.github.io/diploma-NewsExplorer-frontend",
-  "https://api.elena-k.tk",
-  "http://api.elena-k.tk",
-  "https://elena-k.tk",
-  "http://elena-k.tk",
-];
-const corsOptions = {
-  origin(origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-};
-
 module.exports = function (app) {
-  app.post("/signup", cors(corsOptions), signupCheck, createUser);
-  app.post("/signin", cors(corsOptions), signinCheck, login);
-  app.use("/users", cors(corsOptions), auth, usersRouter);
-  app.use("/articles", cors(corsOptions), auth, articlesRouter);
+  app.post("/signup", signupCheck, createUser);
+  app.post("/signin", signinCheck, login);
+  app.use("/users", auth, usersRouter);
+  app.use("/articles", auth, articlesRouter);
   app.use((req, res, next) => {
     next(new NotFound(pageNotFound));
   });

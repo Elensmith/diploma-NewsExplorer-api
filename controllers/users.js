@@ -9,20 +9,10 @@ const Conflict = require("../errors/conflict");
 const { userDoesntExists, emailExists } = require("../constants/errorText");
 const { devKey } = require("../constants/config");
 
-const whitelist = [
-  "http://localhost:8080",
-  "https://elensmith.github.io/diploma-NewsExplorer-frontend",
-  "https://api.elena-k.tk",
-  "http://api.elena-k.tk",
-  "https://elena-k.tk",
-  "http://elena-k.tk",
-];
-
 module.exports.getUserById = (req, res, next) => {
-  if (whitelist.indexOf(req.headers.origin) > -1) {
-    res.set("Access-Control-Allow-Credentials", "true");
-    res.set("Access-Control-Allow-Origin", req.headers.origin);
-  }
+  res.set("Access-Control-Allow-Credentials", "true");
+  res.set("Access-Control-Allow-Origin", req.headers.origin);
+
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
@@ -34,10 +24,9 @@ module.exports.getUserById = (req, res, next) => {
 };
 
 module.exports.createUser = (req, res, next) => {
-  if (whitelist.indexOf(req.headers.origin) > -1) {
-    res.set("Access-Control-Allow-Credentials", "true");
-    res.set("Access-Control-Allow-Origin", req.headers.origin);
-  }
+  res.set("Access-Control-Allow-Credentials", "true");
+  res.set("Access-Control-Allow-Origin", req.headers.origin);
+
   const { name, email, password } = req.body;
   bcrypt.hash(password, 10).then((hash) => {
     User.create({
@@ -68,7 +57,7 @@ module.exports.login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
-        NODE_ENV === "production" ? JWT_SECRET : devKey,
+        NODE_ENV === "production" ? JWT_SECRET : devKey
       );
       res.send({ token });
     })
