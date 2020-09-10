@@ -9,7 +9,7 @@ const { limiter } = require("./middlewares/rateLimiter");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 
 const whitelist = [
-  "http://localhost:8080/",
+  "http://localhost:8080",
   "https://elensmith.github.io/diploma-NewsExplorer-frontend",
 ];
 const corsOptions = {
@@ -33,10 +33,10 @@ const app = express();
 const { log } = console;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors(corsOptions));
 app.use(helmet());
 app.use(limiter);
 app.use(requestLogger);
+app.use(cors(corsOptions));
 require("./routes")(app);
 
 app.use(errorLogger);
