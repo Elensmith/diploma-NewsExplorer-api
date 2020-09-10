@@ -35,12 +35,12 @@ mongoose.connect(DB_ADRESS, {
 
 const app = express();
 const { log } = console;
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(limiter);
 app.use(requestLogger);
-app.use(cors(corsOptions));
 require("./routes")(app);
 
 app.use(errorLogger);
