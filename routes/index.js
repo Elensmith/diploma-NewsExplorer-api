@@ -12,20 +12,37 @@ const { createUser, login } = require("../controllers/users");
 
 const { signupCheck, signinCheck } = require("../middlewares/validationJoi");
 
+const whitelist = [
+  "http://localhost:8080",
+  "https://elensmith.github.io/diploma-NewsExplorer-frontend",
+  "https://api.elena-k.tk",
+  "http://api.elena-k.tk",
+  "https://elena-k.tk",
+  "http://elena-k.tk",
+];
+
 module.exports = function (app) {
   app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-    );
-    if (req.method === "OPTIONS") {
-      res.header(
-        "Access-Control-Allow-Methods",
-        "PUT, POST, PATCH, DELETE, GET"
-      );
-      return res.status(200).json({});
+    if (whitelist.indexOf(req.headers.origin) > -1) {
+      res.set("Access-Control-Allow-Credentials", "true");
+      res.set("Access-Control-Allow-Origin", req.headers.origin);
+    } else {
+      // разрешить другим источникам отправлять неподтвержденные запросы CORS
+      res.set("Access-Control-Allow-Origin", "*");
     }
+
+    // res.header("Access-Control-Allow-Origin", "*");
+    // res.header(
+    //   "Access-Control-Allow-Headers",
+    //   "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    // );
+    // if (req.method === "OPTIONS") {
+    //   res.header(
+    //     "Access-Control-Allow-Methods",
+    //     "PUT, POST, PATCH, DELETE, GET"
+    //   );
+    //   return res.status(200).json({});
+    // }
     next();
   });
   app.post("/signup", signupCheck, createUser);
