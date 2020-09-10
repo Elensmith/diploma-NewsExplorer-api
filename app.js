@@ -9,7 +9,7 @@ const { limiter } = require("./middlewares/rateLimiter");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 
 const whitelist = [
-  "http://localhost:8080",
+  "http://localhost:8080/",
   "https://elensmith.github.io/diploma-NewsExplorer-frontend",
 ];
 const corsOptions = {
