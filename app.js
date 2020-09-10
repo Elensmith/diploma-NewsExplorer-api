@@ -1,23 +1,23 @@
 const express = require("express");
 
-// const whitelist = [
-//   "http://localhost:8080/",
-//   "https://elensmith.github.io/diploma-NewsExplorer-frontend",
-//   "https://api.elena-k.tk",
-//   "http://api.elena-k.tk",
-//   "https://elena-k.tk",
-//   "http://elena-k.tk",
-// ];
-// const corsOptions = {
-//   origin(origin, callback) {
-//     if (whitelist.indexOf(origin) !== -1) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error("Not allowed by CORS"));
-//     }
-//   },
-//   credentials: true,
-// };
+const whitelist = [
+  "http://localhost:8080/",
+  "https://elensmith.github.io/diploma-NewsExplorer-frontend",
+  "https://api.elena-k.tk",
+  "http://api.elena-k.tk",
+  "https://elena-k.tk",
+  "http://elena-k.tk",
+];
+const corsOptions = {
+  origin(origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+};
 
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -43,20 +43,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(limiter);
 app.use(requestLogger);
-app.use(
-  cors({
-    origin: [
-      "http://localhost:8080",
-      "https://elensmith.github.io/diploma-NewsExplorer-frontend",
-      "https://api.elena-k.tk",
-      "http://api.elena-k.tk",
-      "https://elena-k.tk",
-      "http://elena-k.tk",
-    ],
-  })
-);
+// app.use(cors());
 
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 require("./routes")(app);
 
 app.use(errorLogger);
