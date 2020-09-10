@@ -1,11 +1,26 @@
 const express = require("express");
 
+const cors = require("cors");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const { DB_ADRESS, PORT } = require("./constants/config");
 const { limiter } = require("./middlewares/rateLimiter");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
+
+const whitelist = [
+  "http://localhost:8080",
+  "https://elensmith.github.io/diploma-NewsExplorer-frontend",
+];
+const corsOptions = {
+  origin(origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+};
 
 mongoose.connect(DB_ADRESS, {
   useNewUrlParser: true,
@@ -21,7 +36,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(limiter);
 app.use(requestLogger);
-require("./routes")(app);
+require("./routes", cors(corsOptions))(app);
 
 app.use(errorLogger);
 app.listen(PORT, () => {
