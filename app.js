@@ -1,13 +1,5 @@
 const express = require("express");
 
-const cors = require("cors");
-const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
-const helmet = require("helmet");
-const { DB_ADRESS, PORT } = require("./constants/config");
-const { limiter } = require("./middlewares/rateLimiter");
-const { requestLogger, errorLogger } = require("./middlewares/logger");
-
 const whitelist = [
   "http://localhost:8080/",
   "https://elensmith.github.io/diploma-NewsExplorer-frontend",
@@ -27,6 +19,14 @@ const corsOptions = {
   credentials: true,
 };
 
+const cors = require("cors");
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const helmet = require("helmet");
+const { DB_ADRESS, PORT } = require("./constants/config");
+const { limiter } = require("./middlewares/rateLimiter");
+const { requestLogger, errorLogger } = require("./middlewares/logger");
+
 mongoose.connect(DB_ADRESS, {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -43,9 +43,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(limiter);
 app.use(requestLogger);
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 require("./routes")(app);
 
+app.use(cors(corsOptions));
 app.use(errorLogger);
 app.listen(PORT, () => {
   log("App is listening to port ", PORT);
