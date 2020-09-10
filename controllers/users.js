@@ -10,9 +10,6 @@ const { userDoesntExists, emailExists } = require("../constants/errorText");
 const { devKey } = require("../constants/config");
 
 module.exports.getUserById = (req, res, next) => {
-  res.set("Access-Control-Allow-Credentials", "true");
-  res.set("Access-Control-Allow-Origin", req.headers.origin);
-
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
@@ -24,9 +21,6 @@ module.exports.getUserById = (req, res, next) => {
 };
 
 module.exports.createUser = (req, res, next) => {
-  res.set("Access-Control-Allow-Credentials", "true");
-  res.set("Access-Control-Allow-Origin", req.headers.origin);
-
   const { name, email, password } = req.body;
   bcrypt.hash(password, 10).then((hash) => {
     User.create({
