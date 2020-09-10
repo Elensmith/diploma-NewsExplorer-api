@@ -46,15 +46,16 @@ app.use(requestLogger);
 app.use(
   cors({
     origin: [
-      "http://localhost:8080/",
+      "http://localhost:8080",
       "https://elensmith.github.io/diploma-NewsExplorer-frontend",
       "https://api.elena-k.tk",
       "http://api.elena-k.tk",
       "https://elena-k.tk",
       "http://elena-k.tk",
     ],
-  }),
+  })
 );
+
 // app.use(cors(corsOptions));
 require("./routes")(app);
 
