@@ -24,7 +24,7 @@ const whitelist = [
 module.exports = function (app) {
   app.use((req, res, next) => {
     res.set("Access-Control-Allow-Credentials", "true");
-    res.set("Access-Control-Allow-Origin", whitelist);
+    res.set("Access-Control-Allow-Origin", "http://localhost:8080");
 
     // res.header("Access-Control-Allow-Origin", "*");
     res.set(
