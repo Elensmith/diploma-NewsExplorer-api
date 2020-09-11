@@ -12,18 +12,17 @@ const { createUser, login } = require("../controllers/users");
 
 const { signupCheck, signinCheck } = require("../middlewares/validationJoi");
 
-const whitelist = [
-  "http://localhost:8080",
-  "https://elensmith.github.io/diploma-NewsExplorer-frontend",
-  "https://api.elena-k.tk",
-  "http://api.elena-k.tk",
-  "https://elena-k.tk",
-  "http://elena-k.tk",
-];
+// const whitelist = [
+//   "http://localhost:8080",
+//   "https://elensmith.github.io/diploma-NewsExplorer-frontend",
+//   "https://api.elena-k.tk",
+//   "http://api.elena-k.tk",
+//   "https://elena-k.tk",
+//   "http://elena-k.tk",
+// ];
 
 module.exports = function (app) {
   app.use((req, res, next) => {
-    res.set("Access-Control-Allow-Credentials", "true");
     res.set("Access-Control-Allow-Origin", "http://localhost:8080");
 
     // res.header("Access-Control-Allow-Origin", "*");
