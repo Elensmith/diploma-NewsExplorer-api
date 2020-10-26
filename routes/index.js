@@ -1,6 +1,6 @@
 const { errors } = require("celebrate");
 
-const cors = require("cors");
+// const cors = require("cors");
 
 const auth = require("../middlewares/auth");
 const usersRouter = require("./users");
@@ -23,12 +23,12 @@ const { signupCheck, signinCheck } = require("../middlewares/validationJoi");
 
 module.exports = function (app) {
   app.use((req, res, next) => {
-    res.set("Access-Control-Allow-Origin", "http://localhost:8080");
+    res.set("Access-Control-Allow-Origin", "https://elensmith.github.io/diploma-NewsExplorer-frontend");
 
     // res.header("Access-Control-Allow-Origin", "*");
     res.set(
       "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization",
     );
     if (req.method === "OPTIONS") {
       res.set("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
