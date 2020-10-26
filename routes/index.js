@@ -23,7 +23,7 @@ const { signupCheck, signinCheck } = require("../middlewares/validationJoi");
 
 module.exports = function (app) {
   app.use((req, res, next) => {
-    res.set("Access-Control-Allow-Origin", "https://elensmith.github.io/diploma-NewsExplorer-frontend");
+    res.set("Access-Control-Allow-Origin", "https://elensmith.github.io/");
 
     // res.header("Access-Control-Allow-Origin", "*");
     res.set(
